@@ -1,19 +1,24 @@
 import './App.css';
-import {useState, useEffect, useRef} from "react";
+import React from "react";
+import {useState} from "react";
+import ClassContextComponent from "./ClassContextComponent";
+import FunctionContextComponent from "./FunctionContextComponent";
+
+export const ThemeContext = React.createContext();
 
 function App() {
-  const [name, setName] = useState("");
-  const prevName = useRef();
+const [darkTheme, setDarkTheme] = useState(true);
 
-  useEffect(() => {
-      prevName.current = name;
-  }, [name]);
+const toggleTheme = () => {
+  setDarkTheme(!darkTheme);
+}
 
   return (
-    <div className="App">
-      <input value={name} onChange={e => setName(e.target.value)}/>
-      <div>My name is {name} and it use to be {prevName.current}</div>
-    </div>
+      <ThemeContext.Provider value={darkTheme}>
+        <button onClick={toggleTheme}>Toggle Theme</button>
+        <FunctionContextComponent/>
+        <ClassContextComponent/>
+      </ThemeContext.Provider>
   );
 }
 
