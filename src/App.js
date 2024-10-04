@@ -1,25 +1,39 @@
 import './App.css';
-import {useState, useEffect} from "react";
+import {useState, useMemo, useEffect} from "react";
 
 function App() {
-  const [resourceType, setResourceType] = useState('posts');
+  const [number, setNumber] = useState(0);
+  const [dark, setDark] = useState(false);
 
-    console.log("render")
+  const doubleNumber = useMemo( () => {
+    return slowFunction(number)
+  }, [number]);
 
-    useEffect(() =>{
-        console.log("resource changed");
-        return () => {
-            console.log("resource cleanup")
-        }
-  },[resourceType]);
+  const themeStyles = useMemo(() => {
+    return {
+      backgroundColor: dark? 'black' : 'white',
+      color: dark? 'white' : 'black',
+    }
+  }, [dark]);
+
+  useEffect(() => {
+    console.log("Theme changed")
+  }, [themeStyles])
+
   return (
     <div className="App">
-      <button onClick={() => setResourceType('posts')}>Posts</button>
-      <button onClick={() => setResourceType('users')}>Users</button>
-      <button onClick={() => setResourceType('comments')}>Comments</button>
-      <h1>{resourceType}</h1>
+      <input type="number" value={number} onChange={(e) => setNumber(parseInt(e.target.value))}/>
+      <button onClick={() => setDark(prevState => !prevState)}>Change Theme</button>
+      <div style={themeStyles}>{doubleNumber}</div>
     </div>
   );
+}
+
+function slowFunction(number) {
+  // console.log("Calling slow function")
+  for (let i = 0; i < 1000000000; i++) {
+  }
+  return number*2;
 }
 
 export default App;
