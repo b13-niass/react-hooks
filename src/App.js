@@ -2,19 +2,22 @@ import './App.css';
 import {useState, useEffect} from "react";
 
 function App() {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [resourceType, setResourceType] = useState('posts');
 
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    }
+    console.log("render")
 
     useEffect(() =>{
-      window.addEventListener("resize", handleResize)
-      return () => window.removeEventListener("resize", handleResize);
-  },[]);
+        console.log("resource changed");
+        return () => {
+            console.log("resource cleanup")
+        }
+  },[resourceType]);
   return (
     <div className="App">
-        {windowWidth}
+      <button onClick={() => setResourceType('posts')}>Posts</button>
+      <button onClick={() => setResourceType('users')}>Users</button>
+      <button onClick={() => setResourceType('comments')}>Comments</button>
+      <h1>{resourceType}</h1>
     </div>
   );
 }
